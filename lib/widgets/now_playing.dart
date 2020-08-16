@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:movie/bloc/get_movie_videos_bloc.dart';
 import 'package:movie/bloc/now_playing_bloc.dart';
 import 'package:movie/model/movie.dart';
 import 'package:movie/model/movie_response.dart';
+import 'package:movie/model/video.dart';
+import 'package:movie/model/video_response.dart';
 import 'package:movie/screen/video_player.dart';
+import 'package:movie/widgets/now_playing_video.dart';
 import 'package:page_indicator/page_indicator.dart';
 import 'package:movie/styles/theme.dart' as Style;
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -20,6 +24,7 @@ class _NowPlayingState extends State<NowPlaying> {
     super.initState();
     nowPlayingMoviesBloc..getMovies();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +75,7 @@ class _NowPlayingState extends State<NowPlaying> {
 
   Widget _buildNowPlayingWidget(MovieResponse data) {
     List<Movie> movies = data.movies;
+
     if (movies.length == 0) {
       return Container(
         width: MediaQuery.of(context).size.width,
@@ -94,6 +100,7 @@ class _NowPlayingState extends State<NowPlaying> {
               scrollDirection: Axis.horizontal,
               itemCount: movies.take(5).length,
               itemBuilder: (context, index) {
+                moviesVideoBloc..getMovieVideos(movies[index].id);
                 return Stack(
                   children: <Widget>[
                     Container(
@@ -107,6 +114,7 @@ class _NowPlayingState extends State<NowPlaying> {
                                       movies[index].backPoster),
                               fit: BoxFit.cover)),
                     ),
+
                     Container(
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -124,15 +132,7 @@ class _NowPlayingState extends State<NowPlaying> {
                       bottom: 0,
                       right: 0,
                       left: 0,
-                      child: IconButton(
-//                        onPressed: (){
-//                          Navigator.push(context, MaterialPageRoute(builder: (context)=>VideoPlayer(controller: YoutubePlayerController(initialVideoId: movies[index].videos[0].key,flags: YoutubePlayerFlags(
-//                              autoPlay: true,
-//                              forceHD: true
-//                          )))));
-//                        },
-                      onPressed: null,
-                       icon: Icon(FontAwesomeIcons.playCircle,color: Style.Colors.secondColor,size: 50.0,),),
+                      child: NowPlayingVideo(id: movies[index].id,)
                     ),
                     //-------------Movie Title---------
                     Positioned(

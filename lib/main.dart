@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:movie/screen/animated_drawer.dart';
 import 'package:movie/screen/home_screen.dart';
+import 'package:movie/screen/profile_screen.dart';
 void main() {
   runApp(MyApp());
 }
@@ -11,7 +13,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Movie',
-      home: HomeScreen(),
+      home: AnimatedDrawer3D(
+        mainPage: HomeScreen(),
+        secondPage: ProfileScreen(),
+      ),
     );
   }
 }
